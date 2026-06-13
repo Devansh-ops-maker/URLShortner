@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortener</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial,sans-serif;
+        }
+
+        body{
+            height:100vh;
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            background:#f4f6f8;
+        }
+
+        .container{
+            width:90%;
+            max-width:700px;
+            background:white;
+            padding:40px;
+            border-radius:16px;
+            box-shadow:0 10px 30px rgba(0,0,0,.08);
+            text-align:center;
+        }
+
+        h1{
+            margin-bottom:10px;
+            color:#222;
+        }
+
+        p{
+            color:#666;
+            margin-bottom:25px;
+        }
+
+        .input-group{
+            display:flex;
+            gap:12px;
+        }
+
+        input{
+            flex:1;
+            padding:14px;
+            border:1px solid #ddd;
+            border-radius:10px;
+            font-size:16px;
+        }
+
+        button{
+            padding:14px 24px;
+            border:none;
+            border-radius:10px;
+            background:#2563eb;
+            color:white;
+            cursor:pointer;
+        }
+
+        button:hover{
+            background:#1d4ed8;
+        }
+
+        .result{
+            margin-top:25px;
+            display:none;
+            padding:15px;
+            background:#f8fafc;
+            border-radius:10px;
+        }
+
+        a{
+            color:#2563eb;
+            text-decoration:none;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>URL Shortener</h1>
+    <p>Paste your long URL and get a short link instantly.</p>
+
+    <div class="input-group">
+        <input
+            type="text"
+            id="urlInput"
+            placeholder="https://example.com/very/long/url"
+        >
+        <button onclick="shortenURL()">Shorten</button>
+    </div>
+
+    <div class="result" id="result">
+        <h3>Your Short URL</h3>
+        <br>
+        <a id="shortLink" target="_blank"></a>
+    </div>
+</div>
+
+<script>
+async function shortenURL() {
+    const longUrl = document.getElementById("urlInput").value;
+
+    if (!longUrl) return;
+
+    const response = await fetch(
+        `/url/?url=${encodeURIComponent(longUrl)}`
+    );
+
+    const uuid = await response.text();
+
+    const shortUrl =
+        `${window.location.origin}/shorten?uuid=${uuid}`;
+
+    const link = document.getElementById("shortLink");
+
+    link.href = shortUrl;
+    link.innerText = shortUrl;
+
+    document.getElementById("result").style.display = "block";
+}
+</script>
+
+</body>
+</html>
